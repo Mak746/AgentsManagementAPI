@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.Entities
+namespace API.Dtos
 {
-    public class Agent : BaseEntity
+    public class AgentsDto
     {
-
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -19,8 +19,6 @@ namespace Core.Entities
 
         public DateTime DateOfBirth { get; set; }
         public int Commission { get; set; }
-
-        public Category Category { get; set; }
         public int CategoryId { get; set; }
     }
 }

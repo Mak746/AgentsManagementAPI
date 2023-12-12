@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.Entities
+namespace API.Dtos
 {
-    public class Category : BaseEntity
+    public class UsreDto
     {
-
-        public string Name { get; set; }
+        
     }
 }

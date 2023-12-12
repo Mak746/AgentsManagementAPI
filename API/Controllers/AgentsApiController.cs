@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AgentsApiController : ControllerBase
+
+    public class AgentsApiController : BaseApiController
     {
         [HttpGet]
         public string GetAgents()
