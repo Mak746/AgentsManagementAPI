@@ -127,17 +127,17 @@ namespace API.Controllers
                 var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
                 if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
-                var userInRoles = (from u in _context.UserRoles
-                                where u.UserId == user.Id
-                                select u.RoleId).FirstOrDefault();
-                var role = await _roleManager.FindByIdAsync(userInRoles);
+                //var userInRoles = (from u in _context.UserRoles
+                //                where u.UserId == user.Id
+                //                select u.RoleId).FirstOrDefault();
+                //var role = await _roleManager.FindByIdAsync(userInRoles);
 
                 return new UserDto
                 {
                     Email = user.Email,
                     Token = _tokenService.CreateToken(user),
                     DisplayName = user.DisplayName,
-                    Role = role.Name
+                    Role = ""
                 };
             }
             catch (Exception ex)

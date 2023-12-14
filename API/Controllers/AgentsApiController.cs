@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Text;
 using API.Errors;
+using Microsoft.AspNetCore.Authorization;
 namespace API.Controllers
 {
 
@@ -36,12 +37,12 @@ namespace API.Controllers
             try
             {
                 var agentsList = await _agentService.ListAllAgentsAsync();
-                var agentsListDto = _mapper.Map<AgentsDto>(agentsList);
-                return Ok(agentsListDto);
+              
+                return Ok(agentsList);
             }
             catch (Exception ex)
             {
-            
+
 
                 return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
@@ -57,11 +58,11 @@ namespace API.Controllers
             try
             {
                 var singleAgent = await _agentService.GetAgentByIdAsync(id);
-                var agentDto = _mapper.Map<AgentsDto>(singleAgent);
+             
 
-                if (agentDto == null) return NotFound(new ApiResponse(404));
+                if (singleAgent == null) return NotFound(new ApiResponse(404));
 
-                return Ok(agentDto);
+                return Ok(singleAgent);
             }
             catch (Exception ex)
             {
@@ -69,8 +70,12 @@ namespace API.Controllers
             }
 
         }
+
+        [Authorize]
         [Consumes("multipart/form-data")]
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AgentsDto>> CreateAgentAsync([FromForm] AgentsDto agent)
         {
             try
@@ -83,9 +88,9 @@ namespace API.Controllers
 
                     string ext = Path.GetExtension(agent.File.FileName);
                     string extImage = Path.GetExtension(agent.FileImage.FileName);
-                    if(ext.ToLower() != ".pdf" && (extImage.ToLower() != ".png" && extImage.ToLower() != ".jpg"))
+                    if (ext.ToLower() != ".pdf" && (extImage.ToLower() != ".png" && extImage.ToLower() != ".jpg"))
                     {
-                        return BadRequest(new ApiResponse(400, "The file is not of type pdf & the image is not type of PNG or JPG") );
+                        return BadRequest(new ApiResponse(400, "The file is not of type pdf & the image is not type of PNG or JPG"));
 
                     }
                     if (ext.ToLower() != ".pdf")
@@ -96,7 +101,7 @@ namespace API.Controllers
                     }
                     if (extImage.ToLower() != ".png" && extImage.ToLower() != ".jpg")
                     {
-                    
+
                         //return BadRequest("The image is not of type PNG or JPG");
                         return BadRequest(new ApiResponse(400, "The image is not type of PNG or JPG."));
 
@@ -166,12 +171,21 @@ namespace API.Controllers
 
 
         }
+
+        [Authorize]
         [Consumes("multipart/form-data")]
         [HttpPut]
-        public async Task<ActionResult<AgentsDto>> UpdateAgentAsync([FromForm]AgentsDto agent)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AgentsDto>> UpdateAgentAsync([FromForm] AgentsDto agent)
         {
             try
             {
+                var singleAgent = await _agentService.GetAgentByIdAsync(agent.Id);
+
+                if (singleAgent == null) return NotFound(new ApiResponse(404));
+
                 if (agent.File != null && agent.FileImage != null)
                 {
 
@@ -234,7 +248,7 @@ namespace API.Controllers
                 {
                     return BadRequest(new ApiResponse(400, "Either the file or the image is required!"));
 
-                   // return BadRequest("Either the file or the image is required!");
+                    // return BadRequest("Either the file or the image is required!");
 
                 }
 
@@ -247,11 +261,18 @@ namespace API.Controllers
 
         }
 
-        [HttpDelete("id")]
-        public async Task<ActionResult<bool>> deleteAgent(int id)
+        [Authorize]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<bool>> DeleteAgent(int id)
         {
             try
             {
+                var singleAgent = await _agentService.GetAgentByIdAsync(id);
+
+                if (singleAgent == null) return NotFound(new ApiResponse(404));
+
                 var deletedAgent = await _agentService.DeleteAgent(id);
                 if (deletedAgent == null) return false;
                 return true;
