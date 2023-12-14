@@ -13,6 +13,10 @@ namespace API.Helpers
 
             CreateMap<Core.Entities.Identity.Address, AddressDto>().ReverseMap();
             CreateMap<AddressDto, Core.Entities.Identity.Address>();
+            CreateMap<Core.Entities.Agent, AgentsDto>().ReverseMap();
+            CreateMap<AgentsDto, Core.Entities.Agent>();
+            CreateMap<Core.Entities.Category, CategoryDto>().ReverseMap();
+            CreateMap<CategoryDto, Core.Entities.Category>();
 
         }
     }

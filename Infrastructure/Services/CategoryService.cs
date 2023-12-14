@@ -19,52 +19,78 @@ namespace Infrastructure.Services
 
         public async Task<Category> AddCategory(Category entity)
         {
-            _unitOfWork.Repository<Category>().Add(entity);
-            // TODO: save to db
-            var result = await _unitOfWork.Complete();
+            try
+            {
+                _unitOfWork.Repository<Category>().Add(entity);
+                var result = await _unitOfWork.Complete();
+                if (result <= 0) return null;
+                return entity;
+            }
+            catch (Exception ex)
+            { 
+              throw;
+            }
 
-            if (result <= 0) return null;
-            // return agent
-            return entity;
         }
 
-        public async Task<Category> DeleteCategory(Category entity)
+        public async Task<Category> DeleteCategory(int id)
         {
-            _unitOfWork.Repository<Category>().Delete(entity);
-            // TODO: save to db
-            var result = await _unitOfWork.Complete();
-
-            if (result <= 0) return null;
-            // return agent
-            return entity;
+            try
+            {
+                var result = await _unitOfWork.Repository<Category>().GetByIdAsync(id);
+                _unitOfWork.Repository<Category>().Delete(result);
+                var deletedFromDb = await _unitOfWork.Complete();
+                if (deletedFromDb <= 0) return null;
+                return result;
+            }
+            catch (Exception ex)
+            { 
+              throw;
+            }
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            var result = await _unitOfWork.Repository<Category>().GetByIdAsync(id);
-            return result;
+            try
+            {
+                var result = await _unitOfWork.Repository<Category>().GetByIdAsync(id);
+                return result;
+            }
+            catch (Exception ex)
+            { 
+              throw;
+            }
+
         }
 
         public async Task<IReadOnlyList<Category>> ListAllCategoryAsync()
         {
-            var result = await _unitOfWork.Repository<Category>().ListAllAsync();
-            // TODO: save to db
-            // var result = await _unitOfWork.Complete();
+            try
+            {
+                var result = await _unitOfWork.Repository<Category>().ListAllAsync();
+                return result;
+            }
+            catch (Exception ex)
+            { 
+              throw;
+            }
 
-            // if (result <= 0) return null;
-            // return agent
-            return result;
         }
 
         public async Task<Category> UpdateCategory(Category entity)
         {
-            _unitOfWork.Repository<Category>().Update(entity);
-            // TODO: save to db
-            var result = await _unitOfWork.Complete();
+            try
+            {
+                _unitOfWork.Repository<Category>().Update(entity);
+                var result = await _unitOfWork.Complete();
+                if (result <= 0) return null;
+                return entity;
+            }
+            catch (Exception ex)
+            { 
+              throw;
+            }
 
-            if (result <= 0) return null;
-            // return agent
-            return entity;
         }
 
     }

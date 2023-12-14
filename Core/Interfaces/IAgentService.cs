@@ -12,6 +12,6 @@ namespace Core.Interfaces
         Task<IReadOnlyList<Agent>> ListAllAgentsAsync();
         Task<Agent> AddAgent(Agent entity);
         Task<Agent> UpdateAgent(Agent entity);
-        Task<Agent> DeleteAgent(Agent entity);
+        Task<Agent> DeleteAgent(int id);
     }
 }

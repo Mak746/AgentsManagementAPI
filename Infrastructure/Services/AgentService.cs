@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
 
+
 namespace Infrastructure.Services
 {
     public class AgentService : IAgentService
@@ -18,53 +19,84 @@ namespace Infrastructure.Services
         }
         public async Task<Agent> AddAgent(Agent entity)
         {
+             try
+             {
+                _unitOfWork.Repository<Agent>().Add(entity);
+            
+                var result = await _unitOfWork.Complete();
 
-            _unitOfWork.Repository<Agent>().Add(entity);
-            // TODO: save to db
-            var result = await _unitOfWork.Complete();
+                if (result <= 0) return null;
+           
+                return entity;
+             }
+             catch (Exception ex)
+             {
+                throw;
+             }
 
-            if (result <= 0) return null;
-            // return agent
-            return entity;
         }
 
-        public async Task<Agent> DeleteAgent(Agent entity)
+        public async Task<Agent> DeleteAgent(int id)
         {
-            _unitOfWork.Repository<Agent>().Delete(entity);
-            // TODO: save to db
-            var result = await _unitOfWork.Complete();
+             try
+             {
+                var result = await _unitOfWork.Repository<Agent>().GetByIdAsync(id);
 
-            if (result <= 0) return null;
-            // return agent
-            return entity;
+                _unitOfWork.Repository<Agent>().Delete(result);
+                var deletedFromDb = await _unitOfWork.Complete();
+
+                if (deletedFromDb <= 0) return null;
+                return result;
+             }
+             catch (Exception ex)
+             {
+                 throw;
+             }
+
         }
 
         public async Task<Agent> GetAgentByIdAsync(int id)
         {
-            var result = await _unitOfWork.Repository<Agent>().GetByIdAsync(id);
-            return result;
+             try
+             {
+                var result = await _unitOfWork.Repository<Agent>().GetByIdAsync(id);
+                return result;
+             }
+             catch (Exception ex)
+             {
+                 throw;
+             }
+
         }
 
         public async Task<IReadOnlyList<Agent>> ListAllAgentsAsync()
         {
-            var result = await _unitOfWork.Repository<Agent>().ListAllAsync();
-            // TODO: save to db
-            // var result = await _unitOfWork.Complete();
+             try
+             {
+                var result = await _unitOfWork.Repository<Agent>().ListAllAsync();
+                return result;
+             }
+             catch (Exception ex)
+             {
+                 throw;
+             }
 
-            // if (result <= 0) return null;
-            // return agent
-            return result;
         }
 
         public async Task<Agent> UpdateAgent(Agent entity)
         {
-            _unitOfWork.Repository<Agent>().Update(entity);
-            // TODO: save to db
-            var result = await _unitOfWork.Complete();
+             try
+             {
+                _unitOfWork.Repository<Agent>().Update(entity);
+                var result = await _unitOfWork.Complete();
+                if (result <= 0) return null;
+                return entity;
+             }
+             catch (Exception ex)
+             {
+                 throw;
+             }
 
-            if (result <= 0) return null;
-            // return agent
-            return entity;
         }
     }
 }

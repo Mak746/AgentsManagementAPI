@@ -32,7 +32,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
@@ -45,6 +47,9 @@ builder.Services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlite(builder.Con
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAgentService, AgentService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -64,7 +69,26 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
                 };
             });
 
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Agents Management API", Version = "v1" });
+    var securitySchema = new OpenApiSecurityScheme
+    {
+        Description = "JWT Auth Bearer Scheme",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+    c.AddSecurityDefinition("Bearer", securitySchema);
+    var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };
+    c.AddSecurityRequirement(securityRequirement);
+});
 var builderIdentity = builder.Services.AddIdentityCore<AppUser>();
 
 
@@ -101,11 +125,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Agents Managemnt API v1"); });
 }
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 

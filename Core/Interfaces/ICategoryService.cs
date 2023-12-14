@@ -12,6 +12,6 @@ namespace Core.Interfaces
         Task<IReadOnlyList<Category>> ListAllCategoryAsync();
         Task<Category> AddCategory(Category entity);
         Task<Category> UpdateCategory(Category entity);
-        Task<Category> DeleteCategory(Category entity);
+        Task<Category> DeleteCategory(int id);
     }
 }

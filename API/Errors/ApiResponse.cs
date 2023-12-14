@@ -8,7 +8,16 @@ namespace API.Errors
         public ApiResponse(int statusCode, string message=null)
         {
             StatusCode = statusCode;
-            Message = GetDefaultMessageForStatusCode(statusCode);
+            if (message != null)
+            {
+                message = message.Trim();
+                Message= message;
+            }
+            else
+            {
+                Message = GetDefaultMessageForStatusCode(statusCode);
+
+            }
 
         }
 
@@ -22,7 +31,7 @@ namespace API.Errors
                 400=>"A bad request, you have made",
                 401=>"Authorized,you are not",
                 404=>"Resource found,it was not",
-                500=>"Errors are the path to the dark side. Errors lead to anger. anger leads to hate. hate leads to career change ",
+                500=> "Internal server error",
                 _=>null
             };
         }
