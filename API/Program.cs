@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using API.Errors;
 using API.Helpers;
+using API.Identity;
 using API.Middleware;
 using Core.Entities.Identity;
 using Core.Interfaces;
@@ -41,8 +42,9 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<AgentsContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+builder.Services.AddDbContext<AgentsContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection")));
 //builder.Services.AddDbContext(x => x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

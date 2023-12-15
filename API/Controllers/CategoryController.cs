@@ -7,6 +7,9 @@ using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+
+// using Core.Entities;
+// using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,14 +25,14 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-
+        [Authorize]
         [HttpGet("getAllCategories")]
         public async Task<IActionResult> GetAllCategoriesAsync()
         {
             try
             {
                 var categoriesList = await _categoryService.ListAllCategoryAsync();
-       
+
                 return Ok(categoriesList);
             }
             catch (Exception ex)
@@ -39,10 +42,11 @@ namespace API.Controllers
 
         }
 
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetSingleCategory(int id)
+        public async Task<IActionResult> GetSingleCategory(Guid id)
         {
             try
             {
@@ -65,8 +69,11 @@ namespace API.Controllers
             try
             {
                 var fromDto = _mapper.Map<Category>(category);
+                fromDto.Id = Guid.NewGuid();
+
                 var result = await _categoryService.AddCategory(fromDto);
 
+                category.Id = fromDto.Id;
                 return Ok(category);
             }
             catch (Exception ex)
@@ -105,7 +112,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> DeleteCategory(int id)
+        public async Task<ActionResult<bool>> DeleteCategory(Guid id)
         {
             try
             {

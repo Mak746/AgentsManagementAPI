@@ -33,7 +33,7 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<Category> DeleteCategory(int id)
+        public async Task<Category> DeleteCategory(Guid id)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(Guid id)
         {
             try
             {

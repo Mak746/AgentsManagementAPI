@@ -36,7 +36,7 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<Agent> DeleteAgent(int id)
+        public async Task<Agent> DeleteAgent(Guid id)
         {
              try
              {
@@ -55,7 +55,7 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<Agent> GetAgentByIdAsync(int id)
+        public async Task<Agent> GetAgentByIdAsync(Guid id)
         {
              try
              {

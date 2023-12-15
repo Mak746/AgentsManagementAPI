@@ -8,10 +8,10 @@ namespace Core.Interfaces
 {
     public interface ICategoryService
     {
-        Task<Category> GetCategoryByIdAsync(int id);
+        Task<Category> GetCategoryByIdAsync(Guid id);
         Task<IReadOnlyList<Category>> ListAllCategoryAsync();
         Task<Category> AddCategory(Category entity);
         Task<Category> UpdateCategory(Category entity);
-        Task<Category> DeleteCategory(int id);
+        Task<Category> DeleteCategory(Guid id);
     }
 }

@@ -30,14 +30,14 @@ namespace API.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-
+        [Authorize]
         [HttpGet("getAllAgents")]
         public async Task<IActionResult> GetAllAgentsAsync()
         {
             try
             {
                 var agentsList = await _agentService.ListAllAgentsAsync();
-              
+
                 return Ok(agentsList);
             }
             catch (Exception ex)
@@ -50,15 +50,17 @@ namespace API.Controllers
 
         }
 
+
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetSingleAgent(int id)
+        public async Task<IActionResult> GetSingleAgent(Guid id)
         {
             try
             {
                 var singleAgent = await _agentService.GetAgentByIdAsync(id);
-             
+
 
                 if (singleAgent == null) return NotFound(new ApiResponse(404));
 
@@ -139,6 +141,9 @@ namespace API.Controllers
 
                     agent.LicenseAttachmentPath = filePath;
                     agent.AgentPhotoPath = filePathImage;
+                    fromDto.Id = Guid.NewGuid();
+
+                    agent.Id = fromDto.Id;
 
                     var result = await _agentService.AddAgent(fromDto);
                 }
@@ -265,7 +270,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> DeleteAgent(int id)
+        public async Task<ActionResult<bool>> DeleteAgent(Guid id)
         {
             try
             {
@@ -284,6 +289,7 @@ namespace API.Controllers
 
 
         }
+
     }
 
 }

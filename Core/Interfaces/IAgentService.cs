@@ -8,10 +8,10 @@ namespace Core.Interfaces
 {
     public interface IAgentService
     {
-        Task<Agent> GetAgentByIdAsync(int id);
+        Task<Agent> GetAgentByIdAsync(Guid id);
         Task<IReadOnlyList<Agent>> ListAllAgentsAsync();
         Task<Agent> AddAgent(Agent entity);
         Task<Agent> UpdateAgent(Agent entity);
-        Task<Agent> DeleteAgent(int id);
+        Task<Agent> DeleteAgent(Guid id);
     }
 }

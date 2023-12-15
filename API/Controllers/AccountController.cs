@@ -6,12 +6,13 @@ using API.Errors;
 using API.Extensions;
 using AutoMapper;
 using Core.Entities.Identity;
-using Infrastructure.Identity;
+using API.Identity;
 using Core.Interfaces;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure.Identity;
 
 namespace API.Controllers
 {
@@ -46,8 +47,8 @@ namespace API.Controllers
                 var user = await _userManager.FindByEmailFromClaimsPrinciple(User);
 
                 var userInRoles = (from u in _context.UserRoles
-                                where u.UserId == user.Id
-                                select u.RoleId).FirstOrDefault();
+                                   where u.UserId == user.Id
+                                   select u.RoleId).FirstOrDefault();
                 var role = await _roleManager.FindByIdAsync(userInRoles);
 
                 return new UserDto
@@ -61,9 +62,9 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-               return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
+                return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
- 
+
         }
         [HttpGet("getAllUser")]
         public ActionResult<IEnumerable<UserDto>> GetAsync()
@@ -73,11 +74,11 @@ namespace API.Controllers
                 var users = _userManager.Users
                     .ToList();
 
-                return Ok(users);                
+                return Ok(users);
             }
             catch (Exception ex)
             {
-               return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
+                return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
 
         }
@@ -96,7 +97,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-               return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
+                return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
 
         }
@@ -106,11 +107,11 @@ namespace API.Controllers
         {
             try
             {
-               return await _userManager.FindByEmailAsync(email) != null;
+                return await _userManager.FindByEmailAsync(email) != null;
             }
             catch (Exception ex)
             {
-               return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
+                return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
         }
 
@@ -127,10 +128,6 @@ namespace API.Controllers
                 var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
                 if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
-                //var userInRoles = (from u in _context.UserRoles
-                //                where u.UserId == user.Id
-                //                select u.RoleId).FirstOrDefault();
-                //var role = await _roleManager.FindByIdAsync(userInRoles);
 
                 return new UserDto
                 {
@@ -142,7 +139,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-               return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
+                return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
 
         }
@@ -174,9 +171,9 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-               return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
+                return StatusCode(HttpContext.Response.StatusCode, "Internal server error");
             }
- 
+
         }
 
     }

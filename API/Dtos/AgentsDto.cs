@@ -8,7 +8,7 @@ namespace API.Dtos
 {
     public class AgentsDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "First Name is required")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Lats Name is required")]
@@ -24,7 +24,7 @@ namespace API.Dtos
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed for Commission")]
         public int Commission { get; set; }
         [Required(ErrorMessage = "Category is required")]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         [Required(ErrorMessage = "Please select a file.")]
         public IFormFile File { get; set; }
         [Required(ErrorMessage = "Please select an image.")]

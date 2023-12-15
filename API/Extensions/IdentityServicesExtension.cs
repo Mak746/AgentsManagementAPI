@@ -1,8 +1,8 @@
 
 
 using System.Text;
-using Core.Entities.Identity;
-using Infrastructure.Identity;
+// using Core.Entities.Identity;
+//using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -13,31 +13,32 @@ namespace API.Extensions
 {
     public static class IdentityServicesExtension
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
-        {
-            var builder = services.AddIdentityCore<AppUser>();
+        // public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
+        // {
+        //     var builder = services.AddIdentityCore<AppUser>();
 
 
-            builder = new IdentityBuilder(builder.UserType, builder.Services);
-            builder.AddRoles<IdentityRole>();
+        //     builder = new IdentityBuilder(builder.UserType, builder.Services);
+        //     builder.AddRoles<IdentityRole>();
 
-            builder.AddEntityFrameworkStores<AppIdentityDbContext>();
-            builder.AddSignInManager<SignInManager<AppUser>>();
-            //builder.AddRoleManager<RoleManager<AppRole>>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])),
-                    ValidIssuer = config["Token:Issuer"],
-                    ValidateIssuer = true,
-                    ValidateAudience = false
-                };
-            });
+        //     builder.AddEntityFrameworkStores<AppIdentityDbContext>();
+        //     builder.AddSignInManager<SignInManager<AppUser>>();
+        //     //builder.AddRoleManager<RoleManager<AppRole>>();
+        //     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //     .AddJwtBearer(options =>
+        //     {
+        //         options.TokenValidationParameters = new TokenValidationParameters
+        //         {
+        //             ValidateIssuerSigningKey = true,
+        //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])),
+        //             ValidIssuer = config["Token:Issuer"],
+        //             ValidateIssuer = true,
+        //             ValidateAudience = false
+        //         };
+        //     });
 
-            return services;
-        }
+        //     return services;
+        // }
+
     }
 }
